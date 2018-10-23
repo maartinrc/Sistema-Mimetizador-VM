@@ -62,7 +62,7 @@ Materiales
 + Dos protoboard
 + Arduino UNO
 + LCD 16x2
-+ Botón
++ 2 botones
 + 4 resistencias de 220 ohmios
 + Potenciómetro 10kohms
 + fotocelda
