@@ -76,7 +76,7 @@ Diagrama del circuito
 ## Resultados
 <table>
   <tr>
-    <td><img src=https://github.com/JuanSilvestreRamirezBecerra/Sistema-Notificador-de-Llegada-de-Individuos/blob/master/imagen_1.jpeg></td>
-   <td><img src=https://github.com/JuanSilvestreRamirezBecerra/Sistema-Notificador-de-Llegada-de-Individuos/blob/master/imagen_2.jpeg></td>
+    <td><img src=https://github.com/maartinrc/Sistema-Mimetizador-VM/blob/master/imagen_1.jpeg</td>
+   <td><img src=https://github.com/maartinrc/Sistema-Mimetizador-VM/blob/master/imagen_1.jpeg></td>
  </tr>
  </table>
