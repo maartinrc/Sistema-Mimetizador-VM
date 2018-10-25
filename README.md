@@ -53,8 +53,10 @@ Programas usados
 Librerías usadas
 -----------------
 + Interfascia 
++ DHT-sensor
++ ControlP5
 + LiquidCrystal
-
++ Adafruit sensor master
 
 Materiales
 ------------
@@ -76,7 +78,7 @@ Diagrama del circuito
 ## Resultados
 <table>
   <tr>
-    <td><img src=https://github.com/maartinrc/Sistema-Mimetizador-VM/blob/master/imagen_1.jpeg</td>
+    <td><img src=https://github.com/maartinrc/Sistema-Mimetizador-VM/blob/master/imagen_1.jpeg></td>
    <td><img src=https://github.com/maartinrc/Sistema-Mimetizador-VM/blob/master/imagen_2.jpeg></td>
  </tr>
  </table>
