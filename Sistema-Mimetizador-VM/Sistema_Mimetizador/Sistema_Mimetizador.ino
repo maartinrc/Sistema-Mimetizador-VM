@@ -1,4 +1,4 @@
-//#include <Time.h>
+#include <DHT.h>
 #include <LiquidCrystal.h>
 #define RS 3
 #define E 5
@@ -8,6 +8,20 @@
 #define D7 11
 #define boton 2
 #define browser 7
+#define fotoResistencia A0
+// Definimos el pin digital donde se conecta el sensor
+#define DHTPIN 13
+// Dependiendo del tipo de sensor
+#define DHTTYPE DHT11
+
+// Inicializamos el sensor DHT11
+DHT dht(DHTPIN, DHTTYPE);
+
+const long A = 1000; //Resistencia en oscuridad en KΩ
+const int B = 15; //Resistencia a la luz (10 Lux) en KΩ
+const int Rc = 10; //Resistencia calibracion en KΩ
+int V;
+int ilum;
 
 char caracteres;
 
@@ -15,9 +29,11 @@ boolean isMessage;
 
 boolean isRead;
 
-String mensajes[3] ; //cambiar a 4, para que el default sea el del tiempo
+String mensajes[5] ; //cambiar a 4, para que el default sea el del tiempo
 
 int contMessage;
+
+int contCaracteres;
 
 int cont;
 
@@ -38,11 +54,14 @@ LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
         isRead=false;
         caracteres=0;
         contMessage = 0;
+        contCaracteres= 0;
         cont=-1;
         bannerMessage="Mensajes totales 0";
         tam_texto=0;
         spaceMessage=sizeof(mensajes);
-  
+        
+         // Comenzamos el sensor DHT
+        dht.begin();
         attachInterrupt(digitalPinToInterrupt(boton), interrupcion,RISING);
         Serial.begin(9600);
 
@@ -58,27 +77,29 @@ LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
             while (Serial.available() > 0) 
               {
                   caracteres = Serial.read(); //Leer 1 carácter
-                  mensajes[contMessage]+=caracteres;//Almacena el mensaje
+                  contCaracteres++;
+                  if(contCaracteres <= 140)
+                  {
+                    mensajes[contMessage]+=caracteres;//Almacena el mensaje
+                  }
                   delay(25);
               }
-            lcd.print(mensajes[contMessage]);//imprime el mensaje en el lcd
             contMessage++;
             isMessage=true;
           }
          if(isMessage==true)
           {
             bannerMessage="Mensajes totales ";
-            String letrero=bannerMessage + contMessage;
+            String letrero=bannerMessage + contMessage +" -> luminosidad "+ light()+tiempo();
             tam_texto=letrero.length();
             sliceMessage(tam_texto,letrero);     
           }
           else
           {
-            tam_texto=bannerMessage.length();
-            sliceMessage(tam_texto,bannerMessage);
-//
-//            int tam =getFecha().length();
-//            sliceMessage_2(tam,getFecha());
+            String aux ="";
+            aux=bannerMessage +" -> luminosidad "+ light()+tiempo();
+            tam_texto=aux.length();
+            sliceMessage(tam_texto,aux);
           }
 
           while(isRead)
@@ -88,6 +109,8 @@ LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
                     bannerMessage=mensajes[cont];
                     tam_texto=bannerMessage.length();
                     sliceMessage(tam_texto,bannerMessage);
+
+                    
                 }
                 else
                 {
@@ -142,48 +165,45 @@ LiquidCrystal lcd(RS, E, D4, D5, D6, D7);
       cont++;
       spaceMessage=contMessage;
     }
-
-    /*
-FUNCION PARA OBTENER LA FECHA EN MODO TEXTO
-Devuelve: DD-MM-AAAA HH:MM:SS
-*/
-//String getFecha(){
-//
-//String fecha="";
-//int hora=0;
-//int minuto=0;
-//int dia = 0;
-//int mes=0;
-////int año=0;
-//
-// hora=hour();
-// minuto=minute();
-// dia = day();
-// mes=month();
-//// año=year();
-//fecha="Hora: ".concat(hora)+"fdf".concat(minuto)+" Fecha: ".concat(dia)+"/".concat(mes);
-//
-//  return fecha;
-//}
     
+    String light()
+    {
+      V = analogRead(fotoResistencia);
+      ilum = ((long)V*A*10)/((long)B*Rc*(1024-V)); //usar si LDR entre A0 y Vcc (como en el esquema anterior)
+      ilum=map(ilum,8,110,0,100);
+      if(ilum<0)
+      {
+          ilum=0;
+      }
+      else if(ilum>100)
+      {
+          ilum=100;
+      }
+      String sim="% ";
+      String light= ilum + sim;
+      
+      return light;
+    } 
+
+    String tiempo()
+    {
+      // Leemos la humedad relativa
+      float h = dht.readHumidity();
+      // Leemos la temperatura en grados centígrados (por defecto)
+      float t = dht.readTemperature();
  
-//    void sliceMessage_2(int lenghtText,String texto)
-//      {
-//          // Mostramos entrada texto por la izquierda
-//          for(int i=lenghtText; i>0 ; i--)
-//          {
-//              String texto_1 = texto.substring(i-1);
-// 
-//              // Limpiamos pantalla
-//              lcd.clear();
-// 
-//              //Situamos el cursor
-//              lcd.setCursor(1, 0);
-// 
-//              // Escribimos el texto
-//              lcd.print(texto_1);
-// 
-//              // Esperamos
-//              delay(300);
-//          }
-//      } 
+      // Comprobamos si ha habido algún error en la lectura
+      if (isnan(h) || isnan(t))
+      {
+      Serial.println("Error obteniendo los datos del sensor DHT11");
+      return;
+      }
+
+      String aux=" Humedad: ";
+      aux.concat(h);
+      aux.concat(" %\t");
+      aux.concat("Temperatura: ");
+      aux.concat(t);
+      aux.concat(" *C ");
+      return  aux;
+     }

@@ -96,3 +96,9 @@ void mostrarMensajes(){
     
   
 }
+
+String getFecha(){
+  String fecha="";
+  fecha=day() + "/"+month()+"/"+year()+" "+hour()+":"+minute();
+ return fecha; 
+}

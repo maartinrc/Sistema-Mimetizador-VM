@@ -72,3 +72,11 @@ Materiales
 Diagrama del circuito
 ----------------------
 ![alt tag](https://github.com/maartinrc/Sistema-Mimetizador-VM/blob/master/Circuito_Grafico.png)
+
+## Resultados
+<table>
+  <tr>
+    <td><img src=https://github.com/JuanSilvestreRamirezBecerra/Sistema-Notificador-de-Llegada-de-Individuos/blob/master/imagen_1.jpg></td>
+   <td><img src=https://github.com/JuanSilvestreRamirezBecerra/Sistema-Notificador-de-Llegada-de-Individuos/blob/master/imagen_2.jpg></td>
+ </tr>
+ </table>
