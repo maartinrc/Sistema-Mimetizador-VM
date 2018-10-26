@@ -26,7 +26,7 @@ void setup(){
  c = new GUIController(this);//c estara controllando los componentes en este sketch
  
  //printArray(Serial.list());//impime los puertos Serial disponibles
-  puerto = new Serial(this,"/dev/ttyUSB0",9600);
+  puerto = new Serial(this,"/dev/ttyACM0",9600);
  //TextField
  txtMensaje = new IFTextField("Input",50,50,400);
  
@@ -81,16 +81,21 @@ void mostrarMensajes(){
    lblMsj.setLabel("Mensajes enviados");
   if(cont == 1){
     lblMsj1cont.setLabel(cont+".- "+txtMensaje.getValue());
-    puerto.write(txtMensaje.getValue());
+    puerto.write(txtMensaje.getValue()+"\n");
+    puerto.write(getFecha());      
     txtMensaje.setValue("");
     c.add(btnBorrar);
   }else if(cont == 2){
     lblMsj2cont.setLabel(cont+".- "+txtMensaje.getValue());
     puerto.write(txtMensaje.getValue());
+        puerto.write(getFecha());      
+
     txtMensaje.setValue("");
   }else if(cont == 3){
     lblMsj3cont.setLabel(cont+".- "+txtMensaje.getValue());
     puerto.write(txtMensaje.getValue());
+        puerto.write(getFecha());      
+
     txtMensaje.setValue("");
   }
     
